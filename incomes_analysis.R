@@ -46,6 +46,29 @@ file_one%>%
 
 file_one%>%
   group_by(as.factor(County))%>%
-  summarize(med_inc= mean(Case.Personal.income, na.rm= TRUE))
+  summarize(mean_inc= mean(Case.Personal.income, na.rm= TRUE))%>%
+  arrange(-mean_inc)
+
+
+file_n$income_cat <- cut(file_n$Case.Personal.income, c(-1, 4999, 9999, 14999, 19999, 29999, 39999, 49999, 59999, 69999, Inf), c("0-4999", "5000-9999", "10000- 14999", "15000-19999", "20000-29999", "30000-39999", "40000-49999", "50000-59999", "60000-69999", "70000 to Inf" ))
+
+
+#Best performing services by income
+file_n%>%
+  group_by(income_cat)%>%
+  count(Assistance.Category)%>%
+  arrange(-n)
+
+#Worst performing services by income
+file_n%>%
+  group_by(income_cat)%>%
+  count(Assistance.Category)%>%
+  arrange(n)
+
+
+# Research questions for the future
+# How is age correlated to income?
+# How good is housing/lodging services? Who uses it the most? Look more into thrift store vouches- how can we check its value?
+
 
 
