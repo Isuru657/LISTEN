@@ -121,5 +121,18 @@ file_one%>%
   ggplot(aes(x=County, y=n, fill=fixed_income_type))+
   geom_col()
 
+# Distribution of assistance
+
+file_one%>%
+  group_by(County)%>%
+  count(Household..)
+
+file_one%>%
+  group_by(County)%>%
+  count(Household..)%>%
+  summarize(tot= sum(n, na.rm= TRUE))%>%
+  ggplot(aes(x= County, y=tot, fill=County))+
+  geom_col()
+
 
 

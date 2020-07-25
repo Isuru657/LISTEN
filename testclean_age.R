@@ -6,6 +6,7 @@
 ###############################################################################################################################################################################################################################################################################################################################################################
 library(dplyr)
 library(tidyverse)
+library(sjmisc)
 
 #Filenames.
 
@@ -95,6 +96,68 @@ readingFile <- function(filename1, filename2){
 regroupAge <- function (num, data, new_num){
   if (num<20) {data$agecat}
 }
+
+#Splitting the expense variable
+y <- strsplit(file_n$Case.Personal.Expense.Sources, " - ")
+
+
+
+ly <- length(y)
+lx <- length(y[[1]])
+
+source <- vector(mode="character", length=ly)
+amount <- vector(mode="character", length=ly)
+freq <- vector(mode="character", length=ly)
+
+for (i in 1:ly){
+    source[i]=y[[i]][1]
+    amount[i]=y[[i]][2]
+    freq[i]=y[[i]][3]
+  }
+
+freq <- str_replace(freq, ";", "")
+
+file_n$expense_source <- source
+file_n$expense_amount <- amount
+file_n$expense_freq <- freq
+
+#Splitting the income variable
+z <- strsplit(file_n$Case.Personal.Income.Sources, " - ")
+source <- vector(mode="character", length=ly)
+amount <- vector(mode="character", length=ly)
+freq <- vector(mode="character", length=ly)
+
+for (i in 1:ly){
+  source[i]=z[[i]][1]
+  amount[i]=z[[i]][2]
+  freq[i]=z[[i]][3]
+}
+
+freq <- str_replace(freq, ";", "")
+
+file_n$income_source <- source
+file_n$income_amount <- amount
+file_n$income_freq <- freq
+file_n$expense_amount <- as.numeric(file_n$expense_amount)
+
+amt <- vector(mode="numeric", length=ly)
+for (i in 1:ly){
+  if (str_contains(file_n$expense_freq[i], "Weekly")){
+    amt[i]=as.numeric(file_n$expense_amount[i])*4
+  }
+  else if (str_contains(file_n$expense_freq[i], "Monthly")){
+    amt[i]=as.numeric(file_n$expense_amount[i])*1
+  }
+  else if (str_contains(file_n$expense_freq[i], "Biweekly")){
+    amt[i]=as.numeric(file_n$expense_amount[i])*2
+  }
+}
+
+
+
+
+file_n$expense_amount_monthly <- amt
+head(file_n)
 
 # Calling function below.
 file_new <- readingFile(filename1 = filename1, filename2 = filename2)
