@@ -1,5 +1,3 @@
-# LISTEN Scripts
-R Scripts from my time at LISTEN Community Services. I have not included datasets to preserve its confidentiality.
-1) testclean: This contains the code I wrote to clean LISTEN's datasets.
+# LISTEN Functions
 
-Enjoy! :)
+This directory contains the functions that I used for my data analysis. Any one interested is welcome to use the functions documentd here.
